@@ -68,7 +68,7 @@
 {/if}
 </head>
 
-<body id="{$BODY_ID}" class="{$BODY_CLASS}">
+<body id="{$BODY_ID}">
 
 <div id="the_page">
 

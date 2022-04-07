@@ -83,12 +83,7 @@ function ws_addDefaultMethods( $arr )
   $service->addMethod(
     'pwg.activity.getList',
     'ws_getActivityList',
-    array(
-      'page' => array('default'=>null,
-                      'type'=>WS_TYPE_INT|WS_TYPE_POSITIVE),
-      'uid' => array('default'=>NULL,
-                     'type'=>WS_TYPE_INT|WS_TYPE_POSITIVE),
-      ),
+    null,
     'Returns general informations.',
     $ws_functions_root . 'pwg.php',
     array('admin_only'=>true)
@@ -556,14 +551,8 @@ function ws_addDefaultMethods( $arr )
   $service->addMethod(
       'pwg.categories.getAdminList',
       'ws_categories_getAdminList',
-      array(
-        'search' => array('default' => null),
-        'additional_output' =>    array('default'=>null,
-                              'info'=>'Comma saparated list (see method description)'),
-      ),
-      'Get albums list as displayed on admin page. <br>
-      <b>additional_output</b> controls which data are returned, possible values are:<br>
-      null, full_name_with_admin_links<br>',
+      null,
+      'Get albums list as displayed on admin page.',
       $ws_functions_root . 'pwg.categories.php',
       array('admin_only'=>true)
     );
@@ -1210,18 +1199,6 @@ enabled_high, registration_date, registration_date_string, registration_date_sin
     );
 
   $service->addMethod(
-      'pwg.users.preferences.set',
-      'ws_users_preferences_set',
-      array(
-        'param' => array(),
-        'value' => array('flags'=>WS_PARAM_OPTIONAL),
-        'is_json' =>  array('default'=>false, 'type'=>WS_TYPE_BOOL),
-      ),
-      'Set a user preferences parameter. JSON encode the value (and set is_json to true) if you need a complex data structure.',
-      $ws_functions_root . 'pwg.users.php'
-    );
-
-  $service->addMethod(
       'pwg.users.favorites.add',
       'ws_users_favorites_add',
       array(
@@ -1261,14 +1238,6 @@ enabled_high, registration_date, registration_date_string, registration_date_sin
       ),
       'Returns the favorite images of the current user.',
       $ws_functions_root . 'pwg.users.php'
-    );
-
-  $service->addMethod(
-      'pwg.history.search',
-      'ws_history_search',
-      null,
-      'Gives an history of who has visited the galery and the actions done in it. Receives parameter.',
-      $ws_functions_root . 'pwg.php'
     );
 }
 

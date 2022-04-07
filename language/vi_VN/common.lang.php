@@ -7,7 +7,7 @@
 // +-----------------------------------------------------------------------+
 /*
 Language Name: Tiếng Việt [VN]
-Version: auto
+Version: 12.2.0
 Language URI: http://piwigo.org/ext/extension_view.php?eid=437
 Author: Piwigo team
 Author URI: http://piwigo.org

@@ -47,10 +47,6 @@ $template->assign(
     'LEVEL_SEPARATOR' => $conf['level_separator'],
 
     'SHOW_MOBILE_APP_BANNER' => $show_mobile_app_banner,
-
-    'BODY_CLASS' =>
-      isset($page['body_class']) ?
-        $page['body_class'] : '',
     ));
 
 

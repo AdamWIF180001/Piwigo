@@ -376,8 +376,7 @@ DELETE FROM '. PLUGINS_TABLE .'
   }
 
   // Retrieve PEM versions
-  // Beta test : return last version on PEM if the current version isn't known or else return the current and the last version
-  function get_versions_to_check($beta_test=false, $version=PHPWG_VERSION)
+  function get_versions_to_check($version=PHPWG_VERSION)
   {
     global $conf;
 
@@ -385,69 +384,33 @@ DELETE FROM '. PLUGINS_TABLE .'
     $url = PEM_URL . '/api/get_version_list.php?category_id='. $conf['pem_plugins_category'] .'&format=php';
     if (fetchRemote($url, $result) and $pem_versions = @unserialize($result))
     {
-      $i = 0;
-
-      // If the actual version exist, put the PEM id in $versions_to_check
-      while ($i < count($pem_versions) && count($versions_to_check) == 0) 
+      if (!preg_match('/^\d+\.\d+\.\d+$/', $version))
       {
-        if (get_branch_from_version($pem_versions[$i]['name']) == get_branch_from_version($version))
-        {
-          $versions_to_check[] = $pem_versions[$i]['id'];
-        }
-        $i++;
+        $version = $pem_versions[0]['name'];
       }
-
-      // If $beta_test is true, search the previous version
-      if ($beta_test) 
+      $branch = get_branch_from_version($version);
+      foreach ($pem_versions as $pem_version)
       {
-        // If the actual version is not in PEM, put the latest PEM version
-        if (count($versions_to_check) == 0)
+        if (strpos($pem_version['name'], $branch) === 0)
         {
-          $versions_to_check[] = $pem_versions[0]['id'];
-        } 
-        else // Else search the next version in PEM 
-        {
-          $has_found_previous_version = false;
-          while ($i < count($pem_versions) && !$has_found_previous_version)
-          {
-            if ($pem_versions[$i]['id'] != $versions_to_check[0])
-            {
-              $versions_to_check[] = $pem_versions[$i]['id'];
-              $has_found_previous_version = true;
-            }
-            $i++;
-          }  
+          $versions_to_check[] = $pem_version['id'];
         }
       }
-
-      // if (!preg_match('/^\d+\.\d+\.\d+$/', $version))
-      // {
-      //   $version = $pem_versions[0]['name'];
-      // }
-      // $branch = get_branch_from_version($version);
-      // foreach ($pem_versions as $pem_version)
-      // {
-      //   if (strpos($pem_version['name'], $branch) === 0)
-      //   {
-      //     $versions_to_check[] = $pem_version['id'];
-      //   }
-      // }
     }
     return $versions_to_check;
   }
 
   /**
    * Retrieve PEM server datas to $server_plugins
-   * $beta_test parameter add plugins compatible with the previous version
    */
-  function get_server_plugins($new=false, $beta_test=false)
+  function get_server_plugins($new=false)
   {
     global $user, $conf;
 
-    $versions_to_check = $this->get_versions_to_check($beta_test);
+    $versions_to_check = $this->get_versions_to_check();
     if (empty($versions_to_check))
     {
-      return true;
+      return false;
     }
 
     // Plugins to check
@@ -461,7 +424,7 @@ DELETE FROM '. PLUGINS_TABLE .'
     }
 
     // Retrieve PEM plugins infos
-    $url = PEM_URL . '/api/get_revision_list-next.php';
+    $url = PEM_URL . '/api/get_revision_list.php';
     $get_data = array(
       'category_id' => $conf['pem_plugins_category'],
       'format' => 'php',

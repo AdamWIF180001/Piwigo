@@ -474,11 +474,6 @@ SELECT id, path, representative_ext
  */
 function ws_categories_getAdminList($params, &$service)
 {
-
-  global $conf;
-
-  $params['additional_output'] = array_map('trim', explode(',', $params['additional_output']));
-
   $query = '
 SELECT category_id, COUNT(*) AS counter
   FROM '. IMAGE_CATEGORY_TABLE .'
@@ -486,35 +481,17 @@ SELECT category_id, COUNT(*) AS counter
 ;';
   $nb_images_of = query2array($query, 'category_id', 'counter');
 
-  // pwg_db_real_escape_string
-
   $query = '
-SELECT SQL_CALC_FOUND_ROWS id, name, comment, uppercats, global_rank, dir, status
-  FROM '. CATEGORIES_TABLE;
-
-  if (isset($params["search"]) and $params['search'] != "") 
-  {
-    $query .= '
-  WHERE name LIKE \'%'.pwg_db_real_escape_string($params["search"]).'%\'
-  LIMIT '.$conf["linked_album_search_limit"];
-  }
-
-  $query .= '
+SELECT id, name, comment, uppercats, global_rank, dir, status
+  FROM '. CATEGORIES_TABLE .'
 ;';
   $result = pwg_query($query);
-
-  list($counter) = pwg_db_fetch_row(pwg_query('SELECT FOUND_ROWS()'));
 
   $cats = array();
   while ($row = pwg_db_fetch_assoc($result))
   {
     $id = $row['id'];
     $row['nb_images'] = isset($nb_images_of[$id]) ? $nb_images_of[$id] : 0;
-
-    $cat_display_name = get_cat_display_name_cache(
-      $row['uppercats'],
-      'admin.php?page=album-'
-    );
 
     $row['name'] = strip_tags(
       trigger_change(
@@ -523,7 +500,12 @@ SELECT SQL_CALC_FOUND_ROWS id, name, comment, uppercats, global_rank, dir, statu
         'ws_categories_getAdminList'
         )
       );
-    $row['fullname'] = strip_tags($cat_display_name);
+    $row['fullname'] = strip_tags(
+      get_cat_display_name_cache(
+        $row['uppercats'],
+        null
+        )
+      );
     $row['comment'] = strip_tags(
       trigger_change(
         'render_category_description',
@@ -532,17 +514,7 @@ SELECT SQL_CALC_FOUND_ROWS id, name, comment, uppercats, global_rank, dir, statu
         )
       );
 
-    if (in_array('full_name_with_admin_links', $params['additional_output']))
-    {
-      $row["full_name_with_admin_links"] = $cat_display_name;
-    }
-
     $cats[] = $row;
-  }
-
-  $limit_reached = false;
-  if ($counter > $conf["linked_album_search_limit"]) {
-    $limit_reached = true;
   }
 
   usort($cats, 'global_rank_compare');
@@ -550,10 +522,8 @@ SELECT SQL_CALC_FOUND_ROWS id, name, comment, uppercats, global_rank, dir, statu
     'categories' => new PwgNamedArray(
       $cats,
       'category',
-      array('id', 'nb_images', 'name', 'uppercats', 'global_rank', 'status', 'test')
-    ),
-    'limit' => $conf["linked_album_search_limit"],
-    'limit_reached' => $limit_reached,
+      array('id', 'nb_images', 'name', 'uppercats', 'global_rank', 'status')
+      )
     );
 }
 

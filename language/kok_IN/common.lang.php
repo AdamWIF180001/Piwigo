@@ -7,7 +7,7 @@
 // +-----------------------------------------------------------------------+
 /*
 Language Name: कोंकणी [IN]
-Version: auto
+Version: 12.2.0
 Language URI: http://piwigo.org/ext/extension_view.php?eid=660
 Author: Piwigo team
 Author URI: http://piwigo.org

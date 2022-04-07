@@ -357,9 +357,6 @@ SELECT category_id, uppercats
 ;';
 $result = pwg_query($query);
 
-$related_categories = array();
-$related_categories_ids = array();
-
 while ($row = pwg_db_fetch_assoc($result))
 {
   $name =
@@ -374,13 +371,9 @@ while ($row = pwg_db_fetch_assoc($result))
   }
   else
   {
-    $related_categories[$row['category_id']] = $name;
-    $related_categories_ids[] = $row['category_id'];
+    $template->append('related_categories', $name);
   }
 }
-
-$template->assign('related_categories', $related_categories);
-$template->assign('related_categories_ids', $related_categories_ids);
 
 // jump to link
 //

@@ -420,7 +420,7 @@ SELECT
             global $conf;
             $theme['screenshot'] =
               PHPWG_ROOT_PATH.'admin/themes/'
-              .userprefs_get_param('admin_theme', 'clear')
+              .$conf['admin_theme']
               .'/images/missing_screenshot.png'
               ;
           }
@@ -509,7 +509,7 @@ SELECT
     }
 
     // Retrieve PEM themes infos
-    $url = PEM_URL . '/api/get_revision_list-next.php';
+    $url = PEM_URL . '/api/get_revision_list.php';
     $get_data = array_merge($get_data, array(
       'last_revision_only' => 'true',
       'version' => implode(',', $versions_to_check),

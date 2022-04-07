@@ -7,7 +7,7 @@
 // +-----------------------------------------------------------------------+
 /*
 Language Name: English [UK]
-Version: auto
+Version: 12.2.0
 Language URI: http://piwigo.org/ext/extension_view.php?eid=417
 Author: Piwigo team
 Author URI: http://piwigo.org
@@ -417,5 +417,4 @@ $lang['generate random password'] = 'generate random password';
 $lang['Related albums'] = 'Related albums';
 $lang['Album name, 1 &rarr; 5 &rarr; 10 &rarr; 100'] = 'Album name, 1 &rarr; 5 &rarr; 10 &rarr; 100';
 $lang['Album name, 100 &rarr; 10 &rarr; 5 &rarr; 1'] = 'Album name, 100 &rarr; 10 &rarr; 5 &rarr; 1';
-$lang['Start-Date'] = 'Start date';
 ?>

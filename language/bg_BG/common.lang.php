@@ -7,7 +7,7 @@
 // +-----------------------------------------------------------------------+
 /*
 Language Name: Български [BG]
-Version: auto
+Version: 12.2.0
 Language URI: http://piwigo.org/ext/extension_view.php?eid=510
 Author: Piwigo team
 Author URI: http://piwigo.org
